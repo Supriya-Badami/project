@@ -34,14 +34,18 @@ document.body.style.background = 'linear-gradient(80deg, rgb(19, 63, 93),rgb(61,
 // card div
 const cardDiv = document.createElement('div');
 cardDiv.classList.add('card');
-cardDiv.style.width = "90%";
+cardDiv.style.width = "70%px";
 cardDiv.style.maxWidth = '470px';
 cardDiv.style.background = 'linear-gradient(135deg, rgb(0, 254, 186),rgb(77, 52, 239))';
-cardDiv.style.color = 'rgb(171, 165, 165)';
+// cardDiv.style.color = 'rgb(171, 165, 165)';
 cardDiv.style.margin = '100px auto 0';
 cardDiv.style.borderRadius = '20px';
 cardDiv.style.padding = '40px 35px';
 cardDiv.style.textAlign = 'center';
+cardDiv.style.display ="flex";
+cardDiv.style.flexDirection = "column";
+cardDiv.style.alignItems ="center";
+cardDiv.style.padding ="20px";
 
 //apend cardDiv
 
@@ -87,6 +91,8 @@ const image = document.createElement('img');
 image.src = './images/search.png';
 image.alt = 'Search';
 image.style.width= '16px';
+image.style
+
 
 //append Search
 button.appendChild(image);
@@ -96,21 +102,35 @@ cardDiv.appendChild(searchDiv);
 
 //weather
 const weather = document.createElement('div');
+// weather.style.width ="100px";
+// weather.style.marginBottom = "10px";
+
 
 //w image
 const wicon =document.createElement('img');
 wicon.classList.add('icon');
 wicon.src = './images/rain.png';
+wicon.style.margin = "10px auto";
+
 
 //w temprature
 const temp = document.createElement('h1');
 temp.classList.add('tem');
 temp.textContent = '22°c';
+temp.style.fontSize ="80px";
+temp.style.fontWeight ="500";
+temp.style.margin =" 10px 0";
+
 
 //city
 const city =document.createElement('h2');
 city.classList.add('cit');
 city.textContent = 'New York';
+city.style.fontSize ="45px";
+city.style.fontWeight ="400";
+city.style.marginTop = "-10px";
+city.style.marginBottom = "20px";
+
 
 //append weather
 cardDiv.appendChild(wicon);
@@ -124,9 +144,11 @@ const details = document.createElement('div');
 
 //col 1
 const col1 = document.createElement('div');
+
 //humidity
 
 const humidity = document.createElement('div'); 
+
 //hicon
 const hicon = document.createElement('img');
 hicon.classList.add('icon');
@@ -154,10 +176,16 @@ const col2 = document.createElement('div');
 
 //wind
 const wind = document.createElement('div');
+// wind.style.height ="10vh";
+// wind.style.marginLeft= "60px"
+
+
 //wicon
 const windicon = document.createElement('img');
 windicon.classList.add('icon');
 windicon.src = './images/wind.png';
+
+
 
 wind.appendChild(windicon);
 //para
