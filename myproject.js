@@ -84,7 +84,7 @@ button.style.cursor ='pointer';
 
 //image
 const image = document.createElement('img');
-image.src = './weather-app-img/images/search.png';
+image.src = './images/search.png';
 image.alt = 'Search';
 image.style.width= '16px';
 
@@ -95,12 +95,12 @@ searchDiv.appendChild(button);
 cardDiv.appendChild(searchDiv);
 
 //weather
-const weather = document.createElement('weather');
+const weather = document.createElement('div');
 
 //w image
 const wicon =document.createElement('img');
 wicon.classList.add('icon');
-wicon.src = './weather-app-img/images/rain.png';
+wicon.src = './images/rain.png';
 
 //w temprature
 const temp = document.createElement('h1');
@@ -121,6 +121,7 @@ cardDiv.appendChild(city);
 //details
 const details = document.createElement('div');
 
+
 //col 1
 const col1 = document.createElement('div');
 //humidity
@@ -129,7 +130,7 @@ const humidity = document.createElement('div');
 //hicon
 const hicon = document.createElement('img');
 hicon.classList.add('icon');
-hicon.src = './weather-app-img/images/humidity.png';
+hicon.src = './images/humidity.png';
 
 // Paragraphs
 const div = document.createElement('div');
@@ -141,7 +142,7 @@ para1.textContent = '50%';
 const para2 = document.createElement('p');
 para2.textContent = 'Humidity';
 
-// Append paragraphs 
+// Append humidity
 div.appendChild(para1);
 div.appendChild(para2);
 humidity.appendChild(hicon);
@@ -150,23 +151,46 @@ cardDiv.appendChild(humidity);
 
 //col 2
 const col2 = document.createElement('div');
-//humidity
 
-const wind = document.createElement('div'); 
-//hicon
-const hicon = document.createElement('img');
-hicon.classList.add('icon');
-hicon.src = './weather-app-img/images/wind.png';
+//wind
+const wind = document.createElement('div');
+//wicon
+const windicon = document.createElement('img');
+windicon.classList.add('icon');
+windicon.src = './images/wind.png';
 
-// Paragraphs
-const p1 = document.createElement('div');
+wind.appendChild(windicon);
+//para
+const wdiv =document.createElement('div');
+const wp1 =document.createElement('p');
+wp1.classList.add('wind');
+wp1.textContent = '15km/h';
 
-const para1 = document.createElement('p');
-para1.classList.add('hm');
-para1.textContent = '50%';
+const wp2 = document.createElement('p');
+wp2.textContent = 'Wind';
 
-const para2 = document.createElement('p');
-para2.textContent = 'Humidity';
+
+
+col1.appendChild(humidity);
+details.appendChild(col1);
+details.appendChild(col2);
+cardDiv.appendChild(details);
+//append wind
+wdiv.appendChild(wp1);
+wdiv.appendChild(wp2);
+
+wind.appendChild(wicon);
+wind.appendChild(wdiv);
+
+col2.appendChild(wind);
+cardDiv.appendChild(col2);
+
+
+
+
+
+
+
 
 
 
