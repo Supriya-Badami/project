@@ -112,7 +112,6 @@
 // wicon.src = './images/rain.png';
 // wicon.style.margin = "10px auto";
 
-
 // //w temprature
 // const temp = document.createElement('h1');
 // temp.classList.add('tem');
@@ -120,7 +119,6 @@
 // temp.style.fontSize ="80px";
 // temp.style.fontWeight ="500";
 // temp.style.margin =" 10px 0";
-
 
 // //city
 // const city =document.createElement('h2');
@@ -179,7 +177,6 @@
 // // wind.style.height ="10vh";
 // // wind.style.marginLeft= "60px"
 
-
 // //wicon
 // const windicon = document.createElement('img');
 // windicon.classList.add('icon');
@@ -196,8 +193,6 @@
 
 // const wp2 = document.createElement('p');
 // wp2.textContent = 'Wind';
-
-
 
 // col1.appendChild(humidity);
 // details.appendChild(col1);
