@@ -219,7 +219,7 @@ style.textContent = `
   * {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Georgia', sans-serif;
     box-sizing: border-box;
   }
 `;
@@ -234,7 +234,7 @@ cardDiv.classList.add('card');
 cardDiv.style.width = '90%';
 cardDiv.style.maxWidth = '470px';
 cardDiv.style.background = 'linear-gradient(135deg, rgb(0, 254, 186), rgb(77, 52, 239))';
-cardDiv.style.margin = '100px auto 0';
+cardDiv.style.margin = '10px auto 0';
 cardDiv.style.borderRadius = '20px';
 cardDiv.style.padding = '40px 35px';
 cardDiv.style.textAlign = 'center';
@@ -252,8 +252,8 @@ searchDiv.style.justifyContent = 'space-between';
 
 const input = document.createElement('input');
 input.type = 'text';
-input.id = "cityInput";          
-input.name = "city"; 
+input.id = "cityInput";
+input.name = "city";
 input.placeholder = 'Enter city name';
 input.spellcheck = false;
 Object.assign(input.style, {
@@ -286,6 +286,7 @@ image.alt = 'Search';
 image.style.width = '20px';
 image.style.height = '20px';
 
+
 button.appendChild(image);
 searchDiv.appendChild(input);
 searchDiv.appendChild(button);
@@ -295,8 +296,16 @@ cardDiv.appendChild(searchDiv);
 const wicon = document.createElement('img');
 wicon.classList.add('icon');
 wicon.src = './images/rain.png';
-wicon.style.margin = '30px auto';
+wicon.style.margin = '10px auto';
+
+const Message = document.createElement('p');
+Message.style.fontSize = '18px';
+Message.style.marginTop = '20px';
+Message.style.color = 'white';
+Message.style.fontWeight = 'bold';
+cardDiv.appendChild(Message);
 cardDiv.appendChild(wicon);
+
 
 // Temperature
 const temp = document.createElement('h1');
@@ -305,7 +314,7 @@ temp.textContent = '22°C';
 Object.assign(temp.style, {
   fontSize: '80px',
   fontWeight: '500',
-  margin: '10px 0'
+  margin: '5px 0',
 });
 cardDiv.appendChild(temp);
 
@@ -321,13 +330,33 @@ Object.assign(city.style, {
 });
 cardDiv.appendChild(city);
 
+//date
+const dateElement = document.createElement('p');
+dateElement.classList.add('date');
+Object.assign(dateElement.style, {
+  fontSize: '18px',
+  marginTop: '1px',
+  color: 'black'
+});
+cardDiv.appendChild(dateElement);
+
+//weather condition 
+const conditionText = document.createElement('p');
+conditionText.classList.add('condition');
+conditionText.style.fontSize = '24px';
+conditionText.style.marginTop = '10px';
+conditionText.textContent = 'Condition: Rainy'; 
+cardDiv.appendChild(conditionText);
+
+
 // Details container
 const details = document.createElement('div');
 details.style.display = 'flex';
 details.style.justifyContent = 'space-between';
 details.style.width = '100%';
-details.style.marginTop = '30px';
+details.style.marginTop = '50px';
 details.style.alignItems = 'center';
+details.style.fontSize = '20px';
 
 // Column 1 - Humidity
 const col1 = document.createElement('div');
@@ -343,7 +372,7 @@ humidity.style.gap = '10px';
 const hicon = document.createElement('img');
 hicon.src = './images/humidity.png';
 hicon.alt = 'Humidity Icon';
-hicon.style.width = '40px';
+hicon.style.width = '80px';
 
 const hText = document.createElement('div');
 hText.style.textAlign = 'left';
@@ -372,7 +401,7 @@ wind.style.gap = '10px';
 const windIcon = document.createElement('img');
 windIcon.src = './images/wind.png';
 windIcon.alt = 'Wind Icon';
-windIcon.style.width = '40px';
+windIcon.style.width = '80px';
 
 const wText = document.createElement('div');
 wText.style.textAlign = 'left';
@@ -392,75 +421,187 @@ details.appendChild(col1);
 details.appendChild(col2);
 cardDiv.appendChild(details);
 
+const apikey = "5eb56915fd1776a4c52005327883e60a";
+const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+async function getWeatherData(cityName) {
+  const response = await fetch(apiurl + cityName + `&appid=${apikey}`);
+  if (!response.ok) throw new Error("City not found");
+  return await response.json();
+}
+function renderWeather(data) {
+  city.textContent = data.name;
+  temp.textContent = `${Math.round(data.main.temp)}°C`;
+  hValue.textContent = data.main.humidity + "%"; //`${data.main.humidity}%`;
+  wValue.textContent = data.wind.speed + " km/h"; //`${data.wind.speed} km/h`;
+
+  const condition = data.weather[0].main.toLowerCase();
+  let friendlyCondition = "";
+
+  switch (condition) {
+    case "clouds":
+      wicon.src = "./images/clouds.png"; //`./images/${condition}.png`;
+      friendlyCondition = "Cloudy";
+      break;
+    case "clear":
+      wicon.src = "./images/clear.png"; //
+      friendlyCondition = "Sunny";
+      break;
+    case "rain":
+      wicon.src = "./images/rain.png";
+      friendlyCondition = "Rainy";
+      break;
+    case "drizzle":
+      wicon.src = "./images/drizzle.png";
+      friendlyCondition = "Drizzle";
+      break;
+    case "mist":
+      wicon.src = "./images/mist.png";
+      friendlyCondition = "Mist";
+      break;
+    case "snow":
+      wicon.src = "./images/snow.png";
+      friendlyCondition = "Snowy";
+      break;
+    default:
+      wicon.src = "./images/default.png";
+      friendlyCondition = condition.charAt(0).toUpperCase() + condition.slice(1);
+  }
+
+  conditionText.textContent = `${friendlyCondition}`;
+}
+function showError(message) {
+  Message.textContent = message;
+  Message.style.color = "red";
+}
+function toggleLoading(state) {
+}
+async function checkWeather(cityName) {
+  try {
+    Message.textContent = "City Found";
+    Message.style.color = "white";
+
+    const data = await getWeatherData(cityName);
+    renderWeather(data);
+
+  } catch (error) {
+    showError("City not found");
+  }
+}
+button.addEventListener("click", () => {
+  const cityName = input.value.trim();
+  if (cityName !== "") {
+    checkWeather(cityName);
+  }
+
+  const now = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  dateElement.textContent = now.toLocaleDateString('en-US', options);
+});
+
+
 // const apikey = "5eb56915fd1776a4c52005327883e60a";
 // const apiurl ="https://api.openweathermap.org/data/2.5/weather?&unit=matric&q=bangalore";
 // const apikey = "5eb56915fd1776a4c52005327883e60a";
 // const apiurl = "https://api.openweathermap.org/data/2.5/weather?q=bangalore&units=metric";
-const apikey = "5eb56915fd1776a4c52005327883e60a";
-const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+// const apikey = "5eb56915fd1776a4c52005327883e60a";
+// const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
 
-async function checkWeather(cityName) {
-    const response = await fetch(apiurl + cityName + `&appid=${apikey}`);
-    const data = await response.json();
-
-    console.log(data);
-
-    city.textContent = data.name;
-    temp.textContent = Math.round(data.main.temp) + "°C";
-    hValue.textContent = data.main.humidity + "%";
-    wValue.textContent = data.wind.speed + " km/h";
-
-    const condition = data.weather[0].main.toLowerCase();
-
-    if (condition === "clouds"){
-      wicon.src = "./images/clouds.png";
-    }else if (condition === "clear"){
-      wicon.src = "./images/clear.png";
-    }else if (condition === "rain"){
-      wicon.src = "./images/rain.png";
-    }else if (condition === "dizzle"){
-      wicon.src = "./images/dizzle.png";
-    }else if (condition === "mist"){
-      wicon.src = "./images/mist.png";
-    }else if (condition === "snow"){
-      wicon.src = "./images/snow.png";
-    }else {
-      wicon.src ="./images/default.png";
-    }
-}
-
-// checkWeather("Bangalore");
-
-button.addEventListener("click", () => {
-    const cityName = input.value.trim();
-    if (cityName !== "") {
-        checkWeather(cityName);
-    }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// async function checkWeather(cityName) {
+//   try {
+//     Message.textContent = "City Found";
+//     Message.style.color = "white";
+//     const response = await fetch(apiurl + cityName + `&appid=${apikey}`);
+//     if (!response.ok){
+//       throw new Error("City not found");
+//     }
   
+//   // const response = await fetch(apiurl + cityName + `&appid=${apikey}`);
+//   const data = await response.json();
+
+//   console.log(data);
+
+//   city.textContent = data.name;
+//   // temp.textContent = Math.round(data.main.temp) + "°C";
+//   temp.textContent = `${Math.round(data.main.temp)}°C`;
+//   hValue.textContent = data.main.humidity + "%";
+//   wValue.textContent = data.wind.speed + " km/h";
+
+//   const condition = data.weather[0].main.toLowerCase();
+//   let friendlyCondition ="";
+
+//   if (condition === "clouds") {
+//     // wicon.src = "./images/clouds.png";
+//     wicon.src = `./images/${condition}.png`;
+
+//     friendlyCondition ="Cloudy";
+//   } else if (condition === "clear") {
+//     wicon.src = "./images/clear.png";
+//     friendlyCondition ="Sunny";
+//   } else if (condition === "rain") {
+//     wicon.src = "./images/rain.png";
+//     friendlyCondition ="Rainy";
+//   } else if (condition === "dizzle") {
+//     wicon.src = "./images/dizzle.png";
+//     friendlyCondition ="Dizzle";
+//   } else if (condition === "mist") {
+//     wicon.src = "./images/mist.png";
+//     friendlyCondition ="Mist";
+//   } else if (condition === "snow") {
+//     wicon.src = "./images/snow.png";
+//     friendlyCondition ="Snowy";
+//   } else {
+//     wicon.src = "./images/default.png";
+//     friendlyCondition = condition.charAt(0).toUpperCase() + condition.slice(1);
+//   }
+//   conditionText.textContent =`${friendlyCondition}`;
+// }catch (error){
+// Message.textContent = "City not found ";
+// Message.style.color ="red";
+// }
+// }
+
+
+// // checkWeather("Bangalore");
+
+// button.addEventListener("click", () => {
+//   const cityName = input.value.trim();
+//   if (cityName !== "") {
+//     checkWeather(cityName);
+//   }
+
+//   const now = new Date();
+// const options = { 
+//    weekday: 'long',
+//    year: 'numeric',
+//    month: 'long', 
+//    day: 'numeric' };
+// dateElement.textContent = now.toLocaleDateString('en-US', options);
+
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
